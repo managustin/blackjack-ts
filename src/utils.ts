@@ -35,7 +35,7 @@ export function getHandValue(cards: ICard[]): number {
   return value;
 }
 
-export function shuffleArray<T>(array: T[]) {
+export function shuffleArray<T>(array: T[]) {   //Fisher-Yates's algorithm for shuffling.
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [array[i], array[j]] = [array[j], array[i]];
@@ -44,15 +44,27 @@ export function shuffleArray<T>(array: T[]) {
 }
 
 export function getBet(balance: number): number {
-  let bet: number;
+  while (true) {
+    console.log("Debug: Asking for bet...");
+    const bet = prompt("Enter your bet: ");
+    console.log(`Debug: User entered: ${bet}`);
 
-  do {
-    bet = parseInt(prompt(`You have $${balance}. Enter your bet: `), 10); //the second argument specifies that the number is in the decimal system
-  } while (isNaN(bet) || bet <= 0 || bet > balance);
+    if (bet === null || bet.trim() === "") {
+      console.log("Invalid input. Please enter a number.");
+      continue;
+    }
 
-  return bet;
+    const numBet = Number(bet);
+    console.log(`Debug: Parsed bet: ${numBet}`);
+
+    if (!isNaN(numBet) && numBet > 0 && numBet <= balance) {
+      console.log(`Debug: Bet is valid: ${numBet}`);
+      return numBet;
+    }
+
+    console.log("Invalid bet. Try again.");
+  }
 }
-
 export function getStrHand(hand: ICard[], hideSecondCard: boolean = false): string {
 
     let str = "";
